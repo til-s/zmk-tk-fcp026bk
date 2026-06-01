@@ -1,0 +1,60 @@
+/*
+ * TK-FCP026BK Keymap
+ * 86キー 日本語配列 + FNレイヤー
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+// 日本語配列用キー定義
+#define JP_ZENKAKU  GRAVE
+#define JP_CARET    EQUAL
+#define JP_YEN      INT_YEN
+#define JP_AT       LBKT
+#define JP_LBRACKET RBKT
+#define JP_COLON    QUOT
+#define JP_RBRACKET NUHS
+#define JP_BSLASH   INT1
+#define JP_MUHENKAN INT5
+#define JP_HENKAN   INT4
+#define JP_KANA     INT2
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            bindings = <
+/* Row0: ファンクション行 */
+&kp ESC  &kp F1   &kp F2   &kp F3   &kp F4   &kp F5   &kp F6   &kp F7   &kp F8   &kp F9   &kp F10  &kp F11  &kp F12  &kp PSCRN &kp KP_NUM &kp PAUSE_BREAK
+
+/* Row1: 数字行 */
+&kp JP_ZENKAKU &kp N1 &kp N2 &kp N3 &kp N4 &kp N5 &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp MINUS &kp JP_CARET &kp JP_YEN &kp BSPC &kp DEL
+
+/* Row2: QWERTY行 */
+&kp TAB  &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &kp O    &kp P    &kp JP_AT &kp JP_LBRACKET
+
+/* Row3: ASDF行 */
+&kp CAPS &kp A    &kp S    &kp D    &kp F    &kp G    &kp H    &kp J    &kp K    &kp L    &kp SEMI &kp JP_COLON &kp JP_RBRACKET &kp RET
+
+/* Row4: ZXCV行 */
+&kp LSHFT &kp Z   &kp X    &kp C    &kp V    &kp B    &kp N    &kp M    &kp COMMA &kp DOT &kp FSLH &kp JP_BSLASH &kp RSHFT &kp UP
+
+/* Row5: スペース行 */
+&kp LCTRL &kp LGUI &kp LALT &kp JP_MUHENKAN &kp SPACE &kp JP_HENKAN &kp JP_KANA &kp RALT &kp RCTRL &kp LEFT &kp DOWN &kp RIGHT
+            >;
+        };
+
+        fn_layer {
+            bindings = <
+&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans     &trans     &trans
+&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans     &trans     &trans
+&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
+&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
+&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &kp PG_UP
+&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &kp HOME &kp PG_DN &kp END
+            >;
+        };
+    };
+};

@@ -1,0 +1,79 @@
+/*
+ * TK-FCP026BK Shield Overlay
+ * XIAO nRF52840 + MCP23017
+ *
+ * Row 0-7  : XIAO GPIO (D0-D3, D7-D10)  ※D4/D5はI2C専用、D6は未使用
+ * Row 8-15 : MCP23017 GPA0-7 (I2C)
+ * Col 0-7  : MCP23017 GPB0-7 (I2C)
+ */
+#include "keymaps/tk_fcp026bk.keymap"
+
+&i2c0 {
+    status = "okay";
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-names = "default";
+    mcp23017: mcp23017@20 {
+        compatible = "microchip,mcp23017";
+        reg = <0x20>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        ngpios = <16>;
+        status = "okay";
+    };
+};
+
+/* P0.28/P0.29 (D2/D3) をNFCピンからGPIOとして使用するための設定 */
+&uicr {
+    nfct-pins-as-gpios;
+};
+
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 4)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 5)>;
+        };
+    };
+};
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        label = "KSCAN";
+        diode-direction = "row2col";
+
+        row-gpios
+            = <&gpio0 2  GPIO_ACTIVE_HIGH>   /* Row0  D0  P0.02 */
+            , <&gpio0 3  GPIO_ACTIVE_HIGH>   /* Row1  D1  P0.03 */
+            , <&gpio0 28 GPIO_ACTIVE_HIGH>   /* Row2  D2  P0.28 */
+            , <&gpio0 29 GPIO_ACTIVE_HIGH>   /* Row3  D3  P0.29 */
+            , <&gpio1 12 GPIO_ACTIVE_HIGH>   /* Row4  D7  P1.12 */
+            , <&gpio1 13 GPIO_ACTIVE_HIGH>   /* Row5  D8  P1.13 */
+            , <&gpio1 14 GPIO_ACTIVE_HIGH>   /* Row6  D9  P1.14 */
+            , <&gpio1 15 GPIO_ACTIVE_HIGH>   /* Row7  D10 P1.15 */
+            , <&mcp23017 0 GPIO_ACTIVE_HIGH> /* Row8  GPA0 */
+            , <&mcp23017 1 GPIO_ACTIVE_HIGH> /* Row9  GPA1 */
+            , <&mcp23017 2 GPIO_ACTIVE_HIGH> /* Row10 GPA2 */
+            , <&mcp23017 3 GPIO_ACTIVE_HIGH> /* Row11 GPA3 */
+            , <&mcp23017 4 GPIO_ACTIVE_HIGH> /* Row12 GPA4 */
+            , <&mcp23017 5 GPIO_ACTIVE_HIGH> /* Row13 GPA5 */
+            , <&mcp23017 6 GPIO_ACTIVE_HIGH> /* Row14 GPA6 */
+            , <&mcp23017 7 GPIO_ACTIVE_HIGH> /* Row15 GPA7 */
+            ;
+
+        col-gpios
+            = <&mcp23017 8  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col0 GPB0 */
+            , <&mcp23017 9  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col1 GPB1 */
+            , <&mcp23017 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col2 GPB2 */
+            , <&mcp23017 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col3 GPB3 */
+            , <&mcp23017 12 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col4 GPB4 */
+            , <&mcp23017 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col5 GPB5 */
+            , <&mcp23017 14 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col6 GPB6 */
+            , <&mcp23017 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> /* Col7 GPB7 */
+            ;
+    };
+};

@@ -1,6 +1,8 @@
 /*
  * TK-FCP026BK Keymap
  * 86キー 日本語配列 + FNレイヤー
+ *
+ * マトリクス配置 (16行 x 8列)
  */
 
 #include <behaviors.dtsi>
@@ -8,52 +10,64 @@
 #include <dt-bindings/zmk/bt.h>
 
 // 日本語配列用キー定義
-#define JP_ZENKAKU  GRAVE
-#define JP_CARET    EQUAL
-#define JP_YEN      INT_YEN
-#define JP_AT       LBKT
-#define JP_LBRACKET RBKT
-#define JP_COLON    QUOT
-#define JP_RBRACKET NUHS
-#define JP_BSLASH   INT1
-#define JP_MUHENKAN INT5
-#define JP_HENKAN   INT4
-#define JP_KANA     INT2
+#define JP_ZENKAKU  GRAVE        // 半角/全角
+#define JP_CARET    EQUAL        // ^
+#define JP_YEN      INT_YEN      // ¥
+#define JP_AT       LBKT         // @
+#define JP_LBRACKET RBKT         // [
+#define JP_COLON    QUOT         // :
+#define JP_RBRACKET NUHS         // ]
+#define JP_BSLASH   INT1         // バックスラッシュ/ろ
+#define JP_MUHENKAN INT5         // 無変換
+#define JP_HENKAN   INT4         // 変換
+#define JP_KANA     INT2         // カタカナ/ひらがな
+#define JP_RO       INT1         // ろ
 
 / {
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
+            // Layer 0: 通常レイヤー (16行 x 8列)
             bindings = <
-/* Row0: ファンクション行 */
-&kp ESC  &kp F1   &kp F2   &kp F3   &kp F4   &kp F5   &kp F6   &kp F7   &kp F8   &kp F9   &kp F10  &kp F11  &kp F12  &kp PSCRN &kp KP_NUM &kp PAUSE_BREAK
-
-/* Row1: 数字行 */
-&kp JP_ZENKAKU &kp N1 &kp N2 &kp N3 &kp N4 &kp N5 &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp MINUS &kp JP_CARET &kp JP_YEN &kp BSPC &kp DEL
-
-/* Row2: QWERTY行 */
-&kp TAB  &kp Q    &kp W    &kp E    &kp R    &kp T    &kp Y    &kp U    &kp I    &kp O    &kp P    &kp JP_AT &kp JP_LBRACKET
-
-/* Row3: ASDF行 */
-&kp CAPS &kp A    &kp S    &kp D    &kp F    &kp G    &kp H    &kp J    &kp K    &kp L    &kp SEMI &kp JP_COLON &kp JP_RBRACKET &kp RET
-
-/* Row4: ZXCV行 */
-&kp LSHFT &kp Z   &kp X    &kp C    &kp V    &kp B    &kp N    &kp M    &kp COMMA &kp DOT &kp FSLH &kp JP_BSLASH &kp RSHFT &kp UP
-
-/* Row5: スペース行 */
-&kp LCTRL &kp LGUI &kp LALT &kp JP_MUHENKAN &kp SPACE &kp JP_HENKAN &kp JP_KANA &kp RALT &kp RCTRL &kp LEFT &kp DOWN &kp RIGHT
+    /* Row 0 */ &kp ESC    &kp F1     &kp F2     &kp F3     &kp F4     &kp F5     &kp F6     &kp F7
+    /* Row 1 */ &kp F8     &kp F9     &kp F10    &kp F11    &kp F12    &kp PSCRN  &kp KP_NUM &kp PAUSE_BREAK
+    /* Row 2 */ &kp JP_ZENKAKU &kp N1 &kp N2    &kp N3     &kp N4     &kp N5     &kp N6     &kp N7
+    /* Row 3 */ &kp N8     &kp N9     &kp N0     &kp MINUS  &kp JP_CARET &kp JP_YEN &kp BSPC &kp DEL
+    /* Row 4 */ &kp TAB    &kp Q      &kp W      &kp E      &kp R      &kp T      &kp Y      &kp U
+    /* Row 5 */ &kp I      &kp O      &kp P      &kp JP_AT  &kp JP_LBRACKET &kp LBRC  &trans   &trans
+    /* Row 6 */ &kp CAPS   &kp A      &kp S      &kp D      &kp F      &kp G      &kp H      &kp J
+    /* Row 7 */ &kp K      &kp L      &kp SEMI   &kp JP_COLON &kp JP_RBRACKET &kp RET &trans &trans
+    /* Row 8 */ &kp LSHFT  &kp Z      &kp X      &kp C      &kp V      &kp B      &kp N      &kp M
+    /* Row 9 */ &kp COMMA  &kp DOT    &kp FSLH   &kp JP_RO  &kp RSHFT  &kp UP     &trans     &trans
+    /* Row 10 */ &kp LCTRL &kp LGUI   &kp LALT   &kp JP_MUHENKAN &kp SPACE &kp JP_HENKAN &kp JP_KANA &kp RALT
+    /* Row 11 */ &kp RGUI  &mo 1      &kp LEFT   &kp DOWN   &kp RIGHT  &trans     &trans     &trans
+    /* Row 12 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 13 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 14 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 15 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
             >;
         };
 
         fn_layer {
+            // Layer 1: FNレイヤー (16行 x 8列)
             bindings = <
-&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans     &trans     &trans
-&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans     &trans     &trans
-&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
-&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans
-&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &kp PG_UP
-&trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &trans   &kp HOME &kp PG_DN &kp END
+    /* Row 0 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 1 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 2 */ &trans     &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &trans &trans
+    /* Row 3 */ &trans     &trans     &trans     &trans     &trans     &bt BT_CLR &trans     &trans
+    /* Row 4 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 5 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 6 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 7 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 8 */ &trans     &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 9 */ &trans     &trans     &trans     &trans     &trans     &kp PG_UP  &trans     &trans
+    /* Row 10 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 11 */ &trans    &trans     &kp HOME   &kp PG_DN  &kp END    &trans     &trans     &trans
+    /* Row 12 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 13 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 14 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
+    /* Row 15 */ &trans    &trans     &trans     &trans     &trans     &trans     &trans     &trans
             >;
         };
     };

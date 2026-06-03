@@ -22,10 +22,5 @@ config MCP230XX
 
 # デバウンス: ポーリング周期(50ms)より大きく設定することで
 # I2Cの一時的な誤読み取りをキー入力として登録しない
-config ZMK_KSCAN_DEBOUNCE_PRESS_MS
-    default 40
-
-config ZMK_KSCAN_DEBOUNCE_RELEASE_MS
-    default 20
 
 endif

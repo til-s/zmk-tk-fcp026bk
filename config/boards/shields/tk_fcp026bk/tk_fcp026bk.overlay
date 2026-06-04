@@ -3,15 +3,19 @@
  * XIAO nRF52840 + MCP23017
  *
  * 新配線:
- *   Col 0-7 : XIAO GPIO D0-D3, D5-D10
+ *   Col 0-7 : XIAO GPIO D0-D3, D7-D10  ※D4=I2C(SDA), D5=I2C(SCL), D6は未使用
  *             D0=Col0, D1=Col1, D2=Col2, D3=Col3,
- *             D7=Col4, D8=Col5, D9=Col6, D10=Col7  ※D4はI2C(SDA)
+ *             D7=Col4, D8=Col5, D9=Col6, D10=Col7
  *   Row 0-15: MCP23017 GPA0-7(Row0-7) + GPB0-7(Row8-15)
  *
  * ダイオードなしマトリクス:
  *   diode-direction = "col2row"
- *   Col: OUTPUT (GPIO_ACTIVE_LOW)
- *   Row: INPUT  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)
+ *   Col(XIAO): OUTPUT (GPIO_ACTIVE_LOW)
+ *   Row(MCP) : INPUT  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)
+ *
+ * MCP23017のGPIO_PULL_UPはMCP23017内蔵プルアップ(100kΩ)を使用。
+ * XIAOがColのためXIAO内蔵プルアップは不要。
+ * MCP23017はINTA/INTBを未接続のためポーリングモード必須。
  */
 #include "keymaps/tk_fcp026bk.keymap"
 
@@ -19,6 +23,7 @@
     status = "okay";
     pinctrl-0 = <&i2c0_default>;
     pinctrl-names = "default";
+    clock-frequency = <I2C_BITRATE_FAST>; /* 400kHz: MCP23017ポーリングに必要 */
     mcp23017: mcp23017@20 {
         compatible = "microchip,mcp23017";
         reg = <0x20>;
@@ -50,8 +55,10 @@
 
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
-        label = "KSCAN";
         diode-direction = "col2row";
+        poll-period-ms = <10>;           /* MCP23017はポーリング必須 */
+        debounce-press-ms = <20>;
+        debounce-release-ms = <10>;
 
         col-gpios
             = <&gpio0 2  GPIO_ACTIVE_LOW>  /* Col0 D0  P0.02 */

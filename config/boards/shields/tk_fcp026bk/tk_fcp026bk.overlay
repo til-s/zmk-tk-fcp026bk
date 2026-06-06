@@ -54,9 +54,9 @@
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "row2col";
-        poll-period-ms = <10>;           /* MCP23017はポーリング必須 */
-        debounce-press-ms = <20>;
-        debounce-release-ms = <10>;
+        poll-period-ms = <5>;           /* MCP23017はポーリング必須 */
+        debounce-press-ms = <8>;
+        debounce-release-ms = <5>;
 
         row-gpios
             = <&mcp23017 0  GPIO_ACTIVE_LOW>  /* Row0  GPA0 */

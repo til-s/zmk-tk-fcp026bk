@@ -21,4 +21,8 @@ config GPIO_MCP230XX
 config ZMK_BATTERY_REPORTING
     default y
 
+# HIDインジケーター（CapsLock等のLED表示に必要）
+config ZMK_HID_INDICATORS
+    default y
+
 endif

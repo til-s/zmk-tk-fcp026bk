@@ -30,6 +30,7 @@
  *   - nfct-pins-as-gpios は既存のまま（NFC2=P0.10をNumLock LEDに使用）
  */
 #include "keymaps/tk_fcp026bk.keymap"
+#include <dt-bindings/zmk/hid_indicators.h>
 
 &i2c0 {
     status = "okay";

@@ -67,30 +67,42 @@
     };
 
     /*
-     * HIDインジケーター LED
+     * GPIO LED定義（Zephyrの gpio-leds ドライバ）
      *
      * CapsLock LED: XIAO D6 = P1.11
-     *   → &gpio1 11
-     * NumLock  LED: XIAO NFC2 = P0.10
-     *   → &gpio0 10
+     * NumLock  LED: XIAO NFC2 = P0.10（nfct-pins-as-gpiosで転用）
      *
      * 接続例（ACTIVE_HIGH = HIGHで点灯）:
      *   GPIO pin → 330Ω → LED(アノード) → LED(カソード) → GND
-     *
-     * ※ ACTIVE_LOW（LOWで点灯）にする場合:
-     *   GPIO_ACTIVE_LOW に変更し、GNDとLEDの位置を逆にする
      */
-    led_indicators: led_indicators {
-        compatible = "zmk,led-indicators";
+    leds {
+        compatible = "gpio-leds";
 
         caps_lock_led: caps_lock_led {
-            label = "Caps Lock LED";
             gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;  /* D6 = P1.11 */
         };
 
         num_lock_led: num_lock_led {
-            label = "Num Lock LED";
             gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>;  /* NFC2 = P0.10 */
+        };
+    };
+
+    /*
+     * ZMK HIDインジケーター → LED対応定義
+     * ZMK_INDICATOR_LEDS は zmk,indicator-leds ノードの存在で自動有効化される
+     * （Kconfig.defconfigへの記述不要）
+     */
+    indicators {
+        compatible = "zmk,indicator-leds";
+
+        caps_lock_indicator: caps_lock {
+            indicator = <HID_INDICATOR_CAPS_LOCK>;
+            leds = <&caps_lock_led>;
+        };
+
+        num_lock_indicator: num_lock {
+            indicator = <HID_INDICATOR_NUM_LOCK>;
+            leds = <&num_lock_led>;
         };
     };
 

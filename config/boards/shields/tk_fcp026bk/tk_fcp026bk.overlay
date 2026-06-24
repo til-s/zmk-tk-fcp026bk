@@ -1,12 +1,20 @@
 /*
- * TK-FCP026BK Shield Overlay v6
+ * TK-FCP026BK Shield Overlay v8
  * XIAO nRF52840 + MCP23017
  *
  * 配線:
- *   Col 0-7 : XIAO GPIO D0-D3, D7-D10  ※D4=I2C(SDA), D5=I2C(SCL), D6は未使用
+ *   Col 0-7 : XIAO GPIO D0-D3, D7-D10  ※D4=I2C(SDA), D5=I2C(SCL), D6=CapsLock LED
  *             D0=Col0, D1=Col1, D2=Col2, D3=Col3,
  *             D7=Col4, D8=Col5, D9=Col6, D10=Col7
  *   Row 0-15: MCP23017 GPA0-7(Row0-7) + GPB0-7(Row8-15)
+ *
+ * LEDピン:
+ *   CapsLock LED : D6   = P1.11 (XIAO GPIO)
+ *   NumLock  LED : NFC2 = P0.10 (NFCピンをGPIOに転用)
+ *   ※LED接続: GPIO → 電流制限抵抗(330Ω程度) → LED → GND
+ *   ※GPIO_ACTIVE_LOW = HIGH=消灯 / LOW=点灯（LOW側にGNDを接続）
+ *     GPIO_ACTIVE_HIGH = LOW=消灯 / HIGH=点灯（HIGH側にLEDを接続）
+ *     → 通常のNPN駆動の場合はGPIO_ACTIVE_HIGH推奨
  *
  * ダイオードなしマトリクス:
  *   diode-direction = "row2col"
@@ -16,8 +24,13 @@
  * ColはXIAO直結GPIOのため、キー押下時にnRF52840が直接割り込み検知可能。
  * poll-period-msを省略することで割り込みモードが有効になる。
  * MCP23017のINTA/INTBは不要。
+ *
+ * v8変更点:
+ *   - CapsLock / NumLock LED用に led-indicators ノードを追加
+ *   - nfct-pins-as-gpios は既存のまま（NFC2=P0.10をNumLock LEDに使用）
  */
 #include "keymaps/tk_fcp026bk.keymap"
+#include <dt-bindings/zmk/hid_indicators.h>
 
 &i2c0 {
     status = "okay";
@@ -35,6 +48,7 @@
 };
 
 /* P0.28/P0.29 (D2/D3) をNFCピンからGPIOとして使用するための設定 */
+/* P0.09/P0.10 (NFC1/NFC2) も同様にGPIOとして使用可能になる         */
 &uicr {
     nfct-pins-as-gpios;
 };
@@ -51,6 +65,46 @@
 / {
     chosen {
         zmk,kscan = &kscan0;
+    };
+
+    /*
+     * GPIO LED定義（Zephyrの gpio-leds ドライバ）
+     *
+     * CapsLock LED: XIAO D6 = P1.11
+     * NumLock  LED: XIAO NFC2 = P0.10（nfct-pins-as-gpiosで転用）
+     *
+     * 接続例（ACTIVE_HIGH = HIGHで点灯）:
+     *   GPIO pin → 330Ω → LED(アノード) → LED(カソード) → GND
+     */
+    leds {
+        compatible = "gpio-leds";
+
+        caps_lock_led: caps_lock_led {
+            gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>;  /* D6 = P1.11 */
+        };
+
+        num_lock_led: num_lock_led {
+            gpios = <&gpio0 10 GPIO_ACTIVE_HIGH>;  /* NFC2 = P0.10 */
+        };
+    };
+
+    /*
+     * ZMK HIDインジケーター → LED対応定義
+     * ZMK_INDICATOR_LEDS は zmk,indicator-leds ノードの存在で自動有効化される
+     * （Kconfig.defconfigへの記述不要）
+     */
+    indicators {
+        compatible = "zmk,indicator-leds";
+
+        caps_lock_indicator: caps_lock {
+            indicator = <HID_INDICATOR_CAPS_LOCK>;
+            leds = <&caps_lock_led>;
+        };
+
+        num_lock_indicator: num_lock {
+            indicator = <HID_INDICATOR_NUM_LOCK>;
+            leds = <&num_lock_led>;
+        };
     };
 
     kscan0: kscan {

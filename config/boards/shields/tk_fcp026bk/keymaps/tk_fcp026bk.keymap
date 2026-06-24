@@ -10,14 +10,6 @@
  *   Layer 1: fn_layer       … FNキー押しっぱなし中
  *   Layer 2: numlock_layer  … NumLockキーでトグル（テンキー的数字入力）
  *
- * v10変更点:
- *   - num_togマクロを廃止、NumLockキーを &tog 2 に戻す
- *   - numlock_layerの数字を KP_Nx → Nx に変更
- *     KP_Nxはテンキー専用コードでOSのNumLock状態に依存するが、
- *     このキーボードでは「常に数字を入力する」が目的のため
- *     通常の数字キーコード(N0〜N9)を使う方が正しい
- *   - 記号（KP_SLASH / KP_PLUS / KP_MINUS / KP_MULTIPLY）は
- *     テンキー記号として残す（NumLock非依存のため問題なし）
  */
 
 #include <behaviors.dtsi>

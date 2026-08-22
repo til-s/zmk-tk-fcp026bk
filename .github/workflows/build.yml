@@ -14,6 +14,7 @@ on:
           - 'v1 (プロトタイプ)'
           - 'v2 (回路変更版)'
           - 'v3_(nrf52840 plus版)'
+          - 'v4_(nrf52840 plus版)'
 
 jobs:
   pick:
@@ -27,6 +28,7 @@ jobs:
             "v1 (プロトタイプ)")    echo "path=builds/build-v1.yaml" >> "$GITHUB_OUTPUT" ;;
             "v2 (回路変更版)")      echo "path=builds/build-v2.yaml" >> "$GITHUB_OUTPUT" ;;
             "v3_(nrf52840 plus版)") echo "path=builds/build-v3.yaml" >> "$GITHUB_OUTPUT" ;;
+            "v4_(nrf52840 plus版)") echo "path=builds/build-v4.yaml" >> "$GITHUB_OUTPUT" ;;
           esac
 
   build:

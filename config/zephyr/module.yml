@@ -1,0 +1,3 @@
+build:
+  cmake: boards/shields/tk_fcp026bk_v3
+  

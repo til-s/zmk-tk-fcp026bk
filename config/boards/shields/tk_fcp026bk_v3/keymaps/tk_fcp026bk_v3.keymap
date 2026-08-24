@@ -18,10 +18,18 @@
 
 / {
     macros {
+        /*
+         * numlock_layer(layer 2)のトグルのみ行う。
+         * KP_NUM(ホストNumLockトグル)は送らない:
+         *   - numlock_layerのキーはKP_N0-9ではなくN0-9(通常数字キー)を
+         *     使っているためホストNumLock状態は入力結果に影響しない
+         *   - NumLock LEDはホストのHID Indicatorではなく、
+         *     config/src/numlock_layer_led.c がlayer 2の状態から直接制御する
+         */
         numlock_toggle: numlock_toggle {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&kp KP_NUM>, <&tog 2>;
+            bindings = <&tog 2>;
         };
     };
 
@@ -50,7 +58,7 @@
 /* Row2 GPA2 */ &trans            &trans            &trans            &trans            &kp N1            &kp N2            &kp N3            &trans            &trans            &trans            &trans            &trans            &kp KP_PLUS       &trans            &trans            &trans
 /* Row3 GPA3 */ &trans            &trans            &trans            &trans            &trans            &trans            &trans            &kp PG_UP         &trans            &trans            &trans            &trans            &trans            &trans            &trans            &trans
 /* Row4 GPA4 */ &trans            &trans            &trans            &trans            &kp N0            &trans            &trans            &trans            &trans            &trans            &trans            &trans            &trans            &trans            &trans            &trans
-/* Row5 GPA5 */ &trans            &trans            &trans            &trans            &trans            &trans            &trans            &kp HOME          &kp END           &kp PG_DN         &trans            &trans            &kp KP_SLASH      &trans            &trans            &trans
+/* Row5 GPA5 */ &trans            &trans            &trans            &bootloader       &trans            &trans            &trans            &kp HOME          &kp END           &kp PG_DN         &trans            &trans            &kp KP_SLASH      &trans            &trans            &trans
 /* Row6 GPA6 */ &trans            &trans            &trans            &bt BT_CLR        &kp N6            &trans            &trans            &trans            &trans            &kp INS           &trans            &trans            &trans            &trans            &trans            &trans
 /* Row7 GPA7 */ &bt BT_SEL 0      &bt BT_SEL 1      &bt BT_SEL 2      &trans            &kp N7            &kp N8            &kp N9            &trans            &trans            &trans            &trans            &trans            &kp KP_MULTIPLY   &trans            &trans            &trans
             >;                                                                          

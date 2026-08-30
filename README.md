@@ -9,6 +9,10 @@
 
 ## 2. 完成版
 v3で完成。仕様は Spec_v3.md参照
+<img src="images/01_proto1.jpg" alt="プロト1" width="200">
+<img src="images/02_proto2.jpg" alt="プロト2" width="200">
+<img src="images/03_base.jpg" alt="TK-FCP026BK もとの基板" width="200">
+<img src="images/04_zmk.jpg" alt="TK-FCP026BK 自作基板" width="200">
 
 ## 3. Verと概要
 | Ver | 概要 | SMD |

@@ -8,7 +8,7 @@
 市販キーボード TK-FCP026BK を 自作基板( XIAO nRF52840 plus + MCP23017 )、ZMKでワイヤレス(BLE)化する。
 
 ## 2. 完成版
-v3で完成。仕様は Spec_v3.md参照
+v3で完成。仕様は Wiki 参照
 
 <table>
   <tr>
@@ -51,7 +51,7 @@ v3で完成。仕様は Spec_v3.md参照
 zmk-tk-fcp026bk/
 ├── .github/
 │   └── workflows/
-│       └── build.yml
+│        └── build.yml
 ├── builds/
 │   └── build-v1～3.yaml
 ├── config/
@@ -67,49 +67,44 @@ zmk-tk-fcp026bk/
 │   │       ├── Kconfig.shield
 │   │       ├── tk_fcp026bk_v3.conf
 │   │       └── tk_fcp026bk_v3.overlay
-│   ├ zephyr/
+│   ├── zephyr/
 │   │   └── module.yml
-│   └ west.yml
-├── kicad/
-│   └── tk_fcp026bk/
-│   └── tk_fcp026bk_v2/
-│   └── tk_fcp026bk_v3/
-└── build.yaml
+│   └── west.yml
+└── kicad/
+     ├── tk_fcp026bk/
+     ├── tk_fcp026bk_v2/
+     └── tk_fcp026bk_v3/
 ```
 ---
-
 ### `.github/workflows/build.yml`
 
-用途: GitHub Actionsに対するビルド指示書。
+用途: GitHub Actionsに対するビルド指示書。ビルドする対象(build-v1～3.yaml)を選択し、ZMKでコンパイルを実行。
+
+意味: 「ZMKのビルド環境（コンテナ）を起動し、build-v1～3.yamlを引き渡してコンパイルを実行する」という指示が書かれています。
+
+---
+### `builds/build-v1～3.yaml`
+
+用途: 「ボード（マイコン）」と、どの「シールド（キーボード基盤）」を記載。。
 
 意味: どの「ボード（マイコン）」と、どの「シールド（キーボード基盤）」を組み合わせてビルドするかを定義。
 
 ---
+### `config/boards/shields/tk_fcp026bk_v3/keymaps/tk_fcp026bk.keymap`
 
-### `build.yaml`（リポジトリルートに配置）
+用途: キーマップ（配列）定義ファイル。
 
-用途: GitHub Actionsの自動ビルド定義ファイル。
-
-意味: 「コードが更新されたら、ZMKのビルド環境（コンテナ）を起動し、build.yamlに従ってコンパイルを実行する」という自動化の流れが書かれています。
-
----
-
-### `config/west.yml`
-
-用途: ZMKの依存関係（ライブラリ）管理ファイル。
-
-意味: westというZephyrのツールに対し、どのバージョンのZMKソースコードをダウンロードして組み合わせるかを指定します。
+意味: 配線されたマトリクスに対し、具体的にどのキー（A, B, Space, Layer切り替えなど）を割り当てるかを設定します。普段一番編集するファイル。
 
 ---
+### `config/boards/shields/tk_fcp026bk_v3/keymaps/src/numlock_layer_led.c`
 
-### `config/boards/shields/tk_fcp026bk/Kconfig.shield`
+用途: NumLockのLEDをLayerと同期させるための制御用モジュール
 
-用途: シールドの存在をZMKに登録するファイル。
+意味: ZMK標準ではOSのNumLockステータスとLEDが同期する。
 
-意味: SHIELD_TK_FCP026BK という名前のキーボードが存在することをシステムに認識させます。
-
+　　  このキーボードではNumLockはLayerで実装していて不一致になるのでLayer状態に従って表示させるための独自モジュール。
 ---
-
 ### `config/boards/shields/tk_fcp026bk/Kconfig.defconfig`
 
 用途: キーボードのデフォルト内部設定ファイル。
@@ -117,7 +112,13 @@ zmk-tk-fcp026bk/
 意味: 画面（OLED）の有無、RGB LEDの有効化、キーボード名（Bluetoothで見える名前）など、システム裏側の初期値を設定します。
 
 ---
+### `config/boards/shields/tk_fcp026bk/Kconfig.shield`
 
+用途: シールドの存在をZMKに登録するファイル。
+
+意味: SHIELD_TK_FCP026BK という名前のキーボードが存在することをシステムに認識させます。
+
+---
 ### `config/boards/shields/tk_fcp026bk/tk_fcp026bk.overlay`
 
 用途: ハードウェアの配線図（デバイストリ）ファイル。
@@ -125,12 +126,18 @@ zmk-tk-fcp026bk/
 意味: マイコンのどのピン（例：P0.01）が、キーマトリクスのどの行（Row）や列（Column）に繋がっているかを物理的にマッピングします。
 
 ---
+### `config/west.yml`
 
-### `config/boards/shields/tk_fcp026bk/keymaps/tk_fcp026bk.keymap`
+用途: ZMKの依存関係（ライブラリ）管理ファイル。
 
-用途: キーマップ（配列）定義ファイル。
+意味: westというZephyrのツールに対し、どのバージョンのZMKソースコードをダウンロードして組み合わせるかを指定します。
 
-意味: 配線されたマトリクスに対し、具体的にどのキー（A, B, Space, Layer切り替えなど）を割り当てるかを設定します。普段一番編集するファイル。
+---
+### `kicad/tk_fcp026bk_v3/`
+
+用途: KiCadのプロジェクトファイル
+
+意味: 物理的な基盤の設計。
 
 ---
 

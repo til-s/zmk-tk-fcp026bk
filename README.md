@@ -101,9 +101,8 @@ zmk-tk-fcp026bk/
 
 用途: NumLockのLEDをLayerと同期させるための制御用モジュール
 
-意味: ZMK標準ではOSのNumLockステータスとLEDが同期する。
+意味: ZMK標準ではOSのNumLockステータスとLEDが同期する。このキーボードではNumLockはLayerで実装していて不一致になるのでLayer状態に従って表示させるための独自モジュール。
 
-　　  このキーボードではNumLockはLayerで実装していて不一致になるのでLayer状態に従って表示させるための独自モジュール。
 ---
 ### `config/boards/shields/tk_fcp026bk/Kconfig.defconfig`
 
